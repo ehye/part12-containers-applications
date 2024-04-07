@@ -1,0 +1,3 @@
+apt install -y vim
+vim /usr/src/app/index.js
+:wq
