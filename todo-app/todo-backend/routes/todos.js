@@ -17,8 +17,8 @@ router.post('/', async (req, res) => {
   })
   res.send(todo);
   
-  const count = await Todo.countDocuments({});
-  redis.setAsync('todos', count);
+  const count = await redis.getAsync('todos')
+  redis.setAsync('todos', Number(count) + 1);
 });
 
 router.get('/statistics', async (_, res) => {

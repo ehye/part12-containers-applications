@@ -1,0 +1,6 @@
+docker exec -it todo-backend-redis-1 bash
+redis-cli
+KEYS todos
+GET todos
+SET todos 9001
+DEL todos
