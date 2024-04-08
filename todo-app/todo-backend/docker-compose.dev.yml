@@ -9,9 +9,12 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
       MONGO_INITDB_DATABASE: the_database
-    volumes: 
+    volumes:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
   redis:
     image: redis
+    command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
+    volumes:
+      - ./redis_data:/data
     ports:
       - 6379:6379
