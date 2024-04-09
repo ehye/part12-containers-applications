@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  app:
+    image: todo-backend-dev
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 3123:3000
+    environment:
+      - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
+      - REDIS_URL=redis://redis:6379
+
   mongo:
     image: mongo
     ports:
@@ -11,10 +24,11 @@ services:
       MONGO_INITDB_DATABASE: the_database
     volumes:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+
   redis:
     image: redis
     command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
     volumes:
       - ./redis_data:/data
     ports:
-      - 6379:6379
+      - 6489:6379

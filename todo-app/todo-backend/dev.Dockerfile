@@ -4,10 +4,10 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node . .
 
-RUN npm ci
+RUN npm install
 
 ENV DEBUG=playground:*
 
 USER node
 
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]
