@@ -1,0 +1,31 @@
+services:
+  phonebook-backend:
+    image: phonebook-backend-dev
+    build:
+      context: ./phonebook-backend/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./phonebook-backend/:/app
+    environment:
+      - MONGODB_URI=mongodb+srv://fullstack:nNuuu7MpEqoaVsUK@cluster0.zxtcifc.mongodb.net/?retryWrites=true&w=majority
+      - PORT=3001
+    container_name: phonebook-backend-dev
+  
+  phonebook-frontend:
+    image: phonebook-frontend-dev
+    build:
+      context: ./phonebook-frontend/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./phonebook-frontend/:/app
+    container_name: phonebook-frontend-dev
+
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 18188:80
+    container_name: phonebook-reverse-proxy
+    depends_on:
+      - phonebook-frontend # wait for the frontend container to be started
