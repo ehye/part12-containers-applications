@@ -1,32 +1,32 @@
 services:
   todo-frontend:
-    image: todo-frontend-dev
+    image: todo-frontend
     build:
-      context: ./todo-frontend/ # The context will pick this directory as the "build context"
-      dockerfile: dev.Dockerfile # This will simply tell which dockerfile to read
+      context: ./todo-frontend/
+      dockerfile: Dockerfile
     volumes:
       - ./todo-frontend/:/usr/src/app
     # ports:
     #   - 5173:5173
     environment:
       - VITE_BACKEND_URL=api/
-    container_name: todo-frontend-dev
+    container_name: todo-frontend
 
   nginx:
     image: nginx:1.20.1
     volumes:
-      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - 8188:80
+      - 8801:80
     container_name: reverse-proxy
     depends_on:
-      - todo-frontend # wait for the frontend container to be started
+      - todo-frontend
 
   todo-backend:
-    image: todo-backend-dev
+    image: todo-backend
     build:
       context: ./todo-backend/
-      dockerfile: dev.Dockerfile
+      dockerfile: Dockerfile
     volumes:
       - ./todo-backend/:/usr/src/app
     # ports:
@@ -37,12 +37,12 @@ services:
     environment:
       - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
       - REDIS_URL=redis://redis:6379
-    container_name: todo-backend-dev
+    container_name: todo-backend
 
   mongo:
     image: mongo
-    ports:
-      - 3456:27017
+    # ports:
+    #   - 3456:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
@@ -55,5 +55,5 @@ services:
     command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
     volumes:
       - ./todo-backend/redis_data:/data
-    ports:
-      - 6489:6379
+    # ports:
+    #   - 6489:6379
